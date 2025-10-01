@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraSEO AI Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { 
+            max-width: 800px; margin: 0 auto; background: white; 
+            border-radius: 15px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #333; font-size: 2.5em; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 1.1em; }
+        .input-section { margin-bottom: 20px; }
+        textarea { 
+            width: 100%; height: 120px; padding: 15px; border: 2px solid #ddd; 
+            border-radius: 10px; font-size: 16px; resize: vertical;
+            transition: border-color 0.3s;
+        }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .btn { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 15px 30px; border-radius: 10px;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s;
+            width: 100%; margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .result-section { margin-top: 30px; }
+        .result-box { 
+            background: #f8f9fa; padding: 20px; border-radius: 10px; 
+            border-left: 4px solid #667eea; white-space: pre-wrap;
+            min-height: 100px;
+        }
+        .loading { display: none; text-align: center; color: #667eea; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AuraSEO AI</h1>
+            <p>Professional AI-Powered SEO Optimization</p>
+        </div>
+        
+        <div class="input-section">
+            <textarea id="promptInput" placeholder="Describe your SEO needs... 
+Examples:
+- Write an SEO-optimized blog post about 'digital marketing trends 2024'
+- Generate meta descriptions for an e-commerce website
+- Create 10 long-tail keywords for 'vegan recipes'
+- Optimize this page for better Google rankings..."></textarea>
+            
+            <button class="btn" onclick="generateContent()">Generate SEO Content</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <p>🔄 AuraSEO AI is working its magic...</p>
+        </div>
+        
+        <div class="result-section">
+            <h3>🎯 AuraSEO AI Result:</h3>
+            <div class="result-box" id="resultBox">
+                Your optimized content will appear here...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generateContent() {
+            const prompt = document.getElementById('promptInput').value;
+            const loading = document.getElementById('loading');
+            const resultBox = document.getElementById('resultBox');
+            
+            if (!prompt.trim()) {
+                alert('Please enter your SEO request');
+                return;
+            }
+            
+            loading.style.display = 'block';
+            resultBox.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultBox.textContent = data.result;
+                } else {
+                    resultBox.textContent = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultBox.textContent = 'Network error. Make sure the server is running.';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
